@@ -68,12 +68,15 @@
       padding: 12px 48px;
       background: rgba(10,10,10,0.85);
     }
-    .nav-logo img {
-      height: 52px;
-      filter: drop-shadow(0 0 10px rgba(255,209,0,0.3));
-      transition: filter 0.3s;
+    .nav-logo svg {
+      height: 44px; width: auto;
+      filter: drop-shadow(0 0 8px rgba(255,209,0,0.2));
+      transition: filter 0.3s, transform 0.3s;
     }
-    .nav-logo img:hover { filter: drop-shadow(0 0 20px rgba(255,209,0,0.7)); }
+    .nav-logo svg:hover {
+      filter: drop-shadow(0 0 18px rgba(255,209,0,0.55));
+      transform: scale(1.03);
+    }
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
       color: var(--white);
@@ -110,13 +113,20 @@
       height: 100vh; min-height: 680px;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
+      background: var(--black);
     }
     #hero-video {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) translateZ(0);
+      -webkit-transform: translate(-50%, -50%) translateZ(0);
+      min-width: 100%; min-height: 100%;
+      width: auto; height: auto;
       object-fit: cover;
-      opacity: 0.45;
+      opacity: 0.5;
       z-index: 0;
+      will-change: transform;
+      pointer-events: none;
     }
     .hero-overlay {
       position: absolute; inset: 0;
@@ -317,22 +327,36 @@
       color: rgba(255,255,255,0.4);
       margin-top: 4px;
     }
-    .about-visual {
-      position: relative;
+    .about-visual { position: relative; }
+    .about-visual-inner {
+      width: 100%; height: 420px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
     }
-    .about-visual video {
-      width: 100%;
-      border-radius: 2px;
-      filter: brightness(0.85) contrast(1.1);
-      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,209,0,0.1);
+    .av-block {
+      background: var(--dark2);
+      border: 1px solid rgba(255,209,0,0.1);
+      display: flex; align-items: flex-end;
+      padding: 24px; position: relative; overflow: hidden;
+      transition: border-color 0.4s, background 0.4s;
     }
-    .about-visual::after {
+    .av-block::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 60%, rgba(255,209,0,0.08));
-      pointer-events: none;
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,209,0,0.05), transparent 70%);
     }
+    .av-block:hover { border-color: rgba(255,209,0,0.4); background: rgba(255,209,0,0.05); }
+    .av-block-1 { grid-column: 1; grid-row: 1 / 3; }
+    .av-block-2 { grid-column: 2; grid-row: 1; }
+    .av-block-3 { grid-column: 2; grid-row: 2; }
+    .av-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; letter-spacing: 3px;
+      color: rgba(255,209,0,0.6); line-height: 1.1;
+    }
+    .av-block-1 .av-label { font-size: 48px; }
 
     /* ─── BRANDS ─── */
     #brands {
@@ -624,7 +648,7 @@
       display: flex; align-items: center; justify-content: space-between;
       flex-wrap: wrap; gap: 20px;
     }
-    .footer-logo img { height: 42px; opacity: 0.7; }
+    .footer-logo svg { height: 36px; width: auto; opacity: 0.65; }
     .footer-copy {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 12px; letter-spacing: 2px;
@@ -718,9 +742,11 @@
 
   <!-- NAV -->
   <nav id="navbar">
-    <a href="#hero" class="nav-logo">
-      <img src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWZyYTUtMS5jZG5pbnN0YWdyYW0uY29tL3YvdDUxLjgyNzg3LTE5LzYzNzcxMDUxMV8xODU2NTYxOTk5ODAzMTg3OF82NjMxMzQ3MzEyNTI5NTgwMzIzX24uanBnP2VmZz1leUoyWlc1amIyUmxYM1JoWnlJNkluQnliMlpwYkdWZmNHbGpMbVJxWVc1bmJ5NDRPREV1WXpJaWZRJl9uY19odD1zY29udGVudC1mcmE1LTEuY2RuaW5zdGFncmFtLmNvbSZfbmNfY2F0PTExMCZfbmNfb2M9UTZjWjJnRU1mYkV2c2dnYUFZb19XRWZtSGZ3dXR2VWdFeWNCSVJfUjAyY2tVQ1UtcFJEd3pQSVVKV2ZEeE5YeTg3TEJUOWI0MFVYMHVtVGNtZjY5U1F0U1dQWnUmX25jX29oYz1VOFJMUWZvWFZxWVE3a052d0hjUDZBbSZfbmNfZ2lkPTdCTVd1S1hHdlpOdTEzVW92cU12VncmZWRtPUFDV0RxYjhCQUFBQSZjY2I9Ny01Jm9oPTAwX0FmM1FoeG9WcEVvOEdjTEtCQnVyNkVMRWZNanNiMmlRQ2RFMXRTT0pJV3ItOWcmb2U9NjlFQUU2NEEmX25jX3NpZD1lZTk4NzkiLCJmaWxlbmFtZSI6IlNhdmVHcmFtLkFwcF82Mzc3MTA1MTFfMTg1NjU2MTk5OTgwMzE4NzhfNjYzMTM0NzMxMjUyOTU4MDMyM19uLmpwZyIsIm5iZiI6MTc3NjYxOTE0NywiZXhwIjoxNzc2NjIyNzQ3LCJpYXQiOjE3NzY2MTkxNDd9.s_YwOQWm4z-EcolwxpOp0z0ohprMebBD4kIKUji_60U" alt="Board Point"/>
-    </a>
+    <a href="#hero" class="nav-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" width="180" height="44" aria-label="Board Point">
+  <rect x="0" y="0" width="3" height="44" fill="#FFD100"/>
+  <text x="10" y="28" font-family="'Bebas Neue',sans-serif" font-size="30" fill="white" letter-spacing="3">BOARD</text>
+  <text x="10" y="42" font-family="'Bebas Neue',sans-serif" font-size="13" fill="#FFD100" letter-spacing="7">POINT</text>
+</svg></a>
     <ul class="nav-links" id="navlinks">
       <li><a href="#about">Sobre</a></li>
       <li><a href="#brands">Marcas</a></li>
@@ -736,8 +762,8 @@
 
   <!-- HERO -->
   <section id="hero">
-    <video id="hero-video" autoplay muted loop playsinline preload="auto"
-      src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LmNkbmluc3RhZ3JhbS5jb20vbzEvdi90MTYvZjIvbTgyL0FRTWRMNXIwdnhqMk5nTW5VTzhialhCUmwwYzU4c1dGVzNORjVNVDN4YXlXSmh4aW9RbnpYTW9OWlR0Q3hBUldlSU9acERGNzVpZ1EyTUpnUVhaa29oWVYwRE9MclhwZTR4MjJlckEubXA0P3N0cD1kc3QtbXA0JmVmZz1leUp4WlY5bmNtOTFjSE1pT2lKYlhDSnBaMTkzWldKZlpHVnNhWFpsY25sZmRuUnpYMjkwWmx3aVhTSXNJblpsYm1OdlpHVmZkR0ZuSWpvaWRuUnpYM1p2WkY5MWNteG5aVzR1WTJ4cGNITXVZekl1TnpJd0xtSmhjMlZzYVc1bEluMCZfbmNfY2F0PTEwMyZ2cz0xMTY4MzcyNDIwOTk3MjkzXzE1MTcxODM0MjgmX25jX3ZzPUhCa3NGUUlZVDJsblgzaHdkbDl5WldWc2MxOXdaWEp0WVc1bGJuUmZjSEp2WkM4NE1qUXdRVFV4TURJNE5USTFNREJHUmpWRk9EYzFOVEpGT1VZek1qTkNSVjkyYVdSbGIxOWtZWE5vYVc1cGRDNXRjRFFWQUFMSUFSSUFGUUlZT25CaGMzTjBhSEp2ZFdkb1gyVjJaWEp6ZEc5eVpTOUhSM2x0YldocmIyVldaa05vV1RSSFFVbGhORkZ3WWpCMFoyOU5ZbkZmUlVGQlFVWVZBZ0xJQVJJQUtBQVlBQnNBRlFBQUp2akE0TDJiNzY1QUZRSW9Ba016TEJkQVBtMlJhSEt3SVJnU1pHRnphRjlpWVhObGJHbHVaVjh4WDNZeEVRQjElMkZnZGw1cDBCQUElM0QlM0QmX25jX3JpZD0wZDI0NGMwMmYxJmNjYj05LTQmb2g9MDBfQWYydzk1OWtyTWFYNXVUNW9UdnZ2dzBfb05wUmJ6ZzNJQ1ZhLVpOdXZmMDVSQSZvZT02OUU3MTBEQiZfbmNfc2lkPTEwZDEzYiIsImZpbGVuYW1lIjoiU2F2ZUdyYW0uQXBwX0FRTWRMNXIwdnhqMk5nTW5VTzhialhCUmwwYzU4c1dGVzNORjVNVDN4YXlXSmh4aW9RbnpYTW9OWlR0Q3hBUldlSU9acERGNzVpZ1EyTUpnUVhaa29oWVYwRE9MclhwZTR4MjJlckEubXA0IiwibmJmIjoxNzc2NjIyMDY4LCJleHAiOjE3NzY2MjU2NjgsImlhdCI6MTc3NjYyMjA2OH0.QeRPcvn80wd0y7qs2FXgeNS51i7llpWQOn7B2AqXD8E">
+    <video id="hero-video" autoplay muted loop playsinline preload="auto" webkit-playsinline x-webkit-airplay="deny" disablepictureinpicture
+      src="https://media.sssinstagram.com/get?__sig=-SlFe5Si-b_1td5OJCGQ0g&__expires=1776639026&uri=https%3A%2F%2Fscontent-lga3-2.cdninstagram.com%2Fo1%2Fv%2Ft2%2Ff2%2Fm82%2FAQMdL5r0vxj2NgMnUO8bjXBRl0c58sWFW3NF5MT3xayWJhxioQnzXMoNZTtCxARWeIOZpDF75igQ2MJgQXZkohYV0DOLrXpe4x22erA.mp4%3F_nc_cat%3D101%26_nc_sid%3D5e9851%26_nc_ht%3Dscontent-lga3-2.cdninstagram.com%26_nc_ohc%3DcmJB8LuETNUQ7kNvwELnlp8%26efg%3DeyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5JTlNUQUdSQU0uQ0xJUFMuQzMuNzIwLmRhc2hfYmFzZWxpbmVfMV92MSIsInhwdl9hc3NldF9pZCI6MTEwODQwODg4Njk2MzgzOSwiYXNzZXRfYWdlX2RheXMiOjc4MywidmlfdXNlY2FzZV9pZCI6MTAwOTksImR1cmF0aW9uX3MiOjMwLCJ1cmxnZW5fc291cmNlIjoid3d3In0%253D%26ccb%3D17-1%26vs%3Dcd07140e6ed84127%26_nc_vs%3DHBksFQIYT2lnX3hwdl9yZWVsc19wZXJtYW5lbnRfcHJvZC84MjQwQTUxMDI4NTI1MDBGRjVFODc1NTJFOUYzMjNCRV92aWRlb19kYXNoaW5pdC5tcDQVAALIARIAFQIYOnBhc3N0aHJvdWdoX2V2ZXJzdG9yZS9HR3ltbWhrb2VWZkNoWTRHQUlhNFFwYjB0Z29NYnFfRUFBQUYVAgLIARIAKAAYABsCiAd1c2Vfb2lsATEScHJvZ3Jlc3NpdmVfcmVjaXBlATEVAAAm_rnJ3_GF-AMVAigCQzMsF0A-bZFocrAhGBJkYXNoX2Jhc2VsaW5lXzFfdjERAHX-B2XmnQEA%26_nc_gid%3DjPA5utYXh3abbYgCNCohMQ%26_nc_zt%3D28%26_nc_ss%3D7a32e%26oh%3D00_Af2kapK5Xvs1LiDyZFB_jdInEmzBKzIrKL9HgGu_mRhAgw%26oe%3D69E74E3E%26dl%3D1&filename=Amanh%C3%A3%20%C3%A0s%209hs%2C%20esperamos%20voc%C3%AAs!.%23campomourao%20%23boardpoint%20%23sejaainspiracao.mp4&ua=-&referer=https%3A%2F%2Fwww.instagram.com%2F">
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -808,11 +834,12 @@
         </div>
       </div>
       <div class="about-visual reveal reveal-delay-2">
-        <video autoplay muted loop playsinline
-          src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LmNkbmluc3RhZ3JhbS5jb20vbzEvdi90MTYvZjIvbTgyL0FRTWRMNXIwdnhqMk5nTW5VTzhialhCUmwwYzU4c1dGVzNORjVNVDN4YXlXSmh4aW9RbnpYTW9OWlR0Q3hBUldlSU9acERGNzVpZ1EyTUpnUVhaa29oWVYwRE9MclhwZTR4MjJlckEubXA0P3N0cD1kc3QtbXA0JmVmZz1leUp4WlY5bmNtOTFjSE1pT2lKYlhDSnBaMTkzWldKZlpHVnNhWFpsY25sZmRuUnpYMjkwWmx3aVhTSXNJblpsYm1OdlpHVmZkR0ZuSWpvaWRuUnpYM1p2WkY5MWNteG5aVzR1WTJ4cGNITXVZekl1TnpJd0xtSmhjMlZzYVc1bEluMCZfbmNfY2F0PTEwMyZ2cz0xMTY4MzcyNDIwOTk3MjkzXzE1MTcxODM0MjgmX25jX3ZzPUhCa3NGUUlZVDJsblgzaHdkbDl5WldWc2MxOXdaWEp0WVc1bGJuUmZjSEp2WkM4NE1qUXdRVFV4TURJNE5USTFNREJHUmpWRk9EYzFOVEpGT1VZek1qTkNSVjkyYVdSbGIxOWtZWE5vYVc1cGRDNXRjRFFWQUFMSUFSSUFGUUlZT25CaGMzTjBhSEp2ZFdkb1gyVjJaWEp6ZEc5eVpTOUhSM2x0YldocmIyVldaa05vV1RSSFFVbGhORkZ3WWpCMFoyOU5ZbkZmUlVGQlFVWVZBZ0xJQVJJQUtBQVlBQnNBRlFBQUp2akE0TDJiNzY1QUZRSW9Ba016TEJkQVBtMlJhSEt3SVJnU1pHRnphRjlpWVhObGJHbHVaVjh4WDNZeEVRQjElMkZnZGw1cDBCQUElM0QlM0QmX25jX3JpZD0wZDI0NGMwMmYxJmNjYj05LTQmb2g9MDBfQWYydzk1OWtyTWFYNXVUNW9UdnZ2dzBfb05wUmJ6ZzNJQ1ZhLVpOdXZmMDVSQSZvZT02OUU3MTBEQiZfbmNfc2lkPTEwZDEzYiIsImZpbGVuYW1lIjoiU2F2ZUdyYW0uQXBwX0FRTWRMNXIwdnhqMk5nTW5VTzhialhCUmwwYzU4c1dGVzNORjVNVDN4YXlXSmh4aW9RbnpYTW9OWlR0Q3hBUldlSU9acERGNzVpZ1EyTUpnUVhaa29oWVYwRE9MclhwZTR4MjJlckEubXA0IiwibmJmIjoxNzc2NjIyMDY4LCJleHAiOjE3NzY2MjU2NjgsImlhdCI6MTc3NjYyMjA2OH0.QeRPcvn80wd0y7qs2FXgeNS51i7llpWQOn7B2AqXD8E">
-        </video>
+        <div class="about-visual-inner">
+          <div class="av-block av-block-1"><span class="av-label">STREET<br/>WEAR</span></div>
+          <div class="av-block av-block-2"><span class="av-label">TÊNIS</span></div>
+          <div class="av-block av-block-3"><span class="av-label">ACESS.</span></div>
+        </div>
       </div>
-    </div>
   </section>
 
   <!-- BRANDS -->
@@ -954,9 +981,11 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">
-      <img src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWZyYTUtMS5jZG5pbnN0YWdyYW0uY29tL3YvdDUxLjgyNzg3LTE5LzYzNzcxMDUxMV8xODU2NTYxOTk5ODAzMTg3OF82NjMxMzQ3MzEyNTI5NTgwMzIzX24uanBnP2VmZz1leUoyWlc1amIyUmxYM1JoWnlJNkluQnliMlpwYkdWZmNHbGpMbVJxWVc1bmJ5NDRPREV1WXpJaWZRJl9uY19odD1zY29udGVudC1mcmE1LTEuY2RuaW5zdGFncmFtLmNvbSZfbmNfY2F0PTExMCZfbmNfb2M9UTZjWjJnRU1mYkV2c2dnYUFZb19XRWZtSGZ3dXR2VWdFeWNCSVJfUjAyY2tVQ1UtcFJEd3pQSVVKV2ZEeE5YeTg3TEJUOWI0MFVYMHVtVGNtZjY5U1F0U1dQWnUmX25jX29oYz1VOFJMUWZvWFZxWVE3a052d0hjUDZBbSZfbmNfZ2lkPTdCTVd1S1hHdlpOdTEzVW92cU12VncmZWRtPUFDV0RxYjhCQUFBQSZjY2I9Ny01Jm9oPTAwX0FmM1FoeG9WcEVvOEdjTEtCQnVyNkVMRWZNanNiMmlRQ2RFMXRTT0pJV3ItOWcmb2U9NjlFQUU2NEEmX25jX3NpZD1lZTk4NzkiLCJmaWxlbmFtZSI6IlNhdmVHcmFtLkFwcF82Mzc3MTA1MTFfMTg1NjU2MTk5OTgwMzE4NzhfNjYzMTM0NzMxMjUyOTU4MDMyM19uLmpwZyIsIm5iZiI6MTc3NjYxOTE0NywiZXhwIjoxNzc2NjIyNzQ3LCJpYXQiOjE3NzY2MTkxNDd9.s_YwOQWm4z-EcolwxpOp0z0ohprMebBD4kIKUji_60U" alt="Board Point"/>
-    </div>
+    <div class="footer-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" width="180" height="44" aria-label="Board Point">
+  <rect x="0" y="0" width="3" height="44" fill="#FFD100"/>
+  <text x="10" y="28" font-family="'Bebas Neue',sans-serif" font-size="30" fill="white" letter-spacing="3">BOARD</text>
+  <text x="10" y="42" font-family="'Bebas Neue',sans-serif" font-size="13" fill="#FFD100" letter-spacing="7">POINT</text>
+</svg></div>
     <div class="footer-copy">© 2025 Board Point · Campo Mourão · PR</div>
     <div class="footer-links">
       <a href="https://www.instagram.com/board_point/" target="_blank">Instagram</a>
@@ -1000,6 +1029,25 @@
         nl.style.backdropFilter = 'blur(20px)';
       }
     });
+
+    // ── VIDEO MOBILE FALLBACK ──
+    (function() {
+      var v = document.getElementById('hero-video');
+      if (!v) return;
+      v.muted = true;
+      var p = v.play();
+      if (p !== undefined) {
+        p.catch(function() {
+          var fn = function() {
+            v.play().catch(function(){});
+            document.removeEventListener('touchstart', fn);
+            document.removeEventListener('click', fn);
+          };
+          document.addEventListener('touchstart', fn, {passive:true});
+          document.addEventListener('click', fn, {once:true});
+        });
+      }
+    })();
 
     // ── SCROLL REVEAL ──
     const reveals = document.querySelectorAll('.reveal');
