@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Board Point – Streetwear | Tênis | Acessórios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #FFD100;
+      --gold2: #FDD017;
+      --black: #0a0a0a;
+      --dark: #111111;
+      --dark2: #1a1a1a;
+      --dark3: #242424;
+      --white: #f5f5f5;
+      --gray: #888;
+      --blur-bg: rgba(10,10,10,0.55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── CURSOR ─── */
+    body { cursor: none; }
+    #cursor {
+      width: 18px; height: 18px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    #cursor.hover { width: 40px; height: 40px; }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1000; opacity: 0.35;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 500;
+      padding: 18px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      background: rgba(10,10,10,0.6);
+      border-bottom: 1px solid rgba(255,209,0,0.12);
+      transition: all 0.4s;
+    }
+    nav.scrolled {
+      padding: 12px 48px;
+      background: rgba(10,10,10,0.85);
+    }
+    .nav-logo img {
+      height: 52px;
+      filter: drop-shadow(0 0 10px rgba(255,209,0,0.3));
+      transition: filter 0.3s;
+    }
+    .nav-logo img:hover { filter: drop-shadow(0 0 20px rgba(255,209,0,0.7)); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 8px 22px;
+      border-radius: 2px;
+      font-weight: 700 !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover { background: #ffe033; color: var(--black) !important; }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      height: 100vh; min-height: 680px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.45;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.35) 60%, rgba(255,209,0,0.08) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+    }
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px; letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(70px, 12vw, 160px);
+      line-height: 0.9;
+      letter-spacing: 4px;
+      color: var(--white);
+      text-shadow: 0 0 60px rgba(255,209,0,0.15);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+    .hero-title span { color: var(--gold); }
+    .hero-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px; letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(245,245,245,0.6);
+      margin: 18px 0 40px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.7s forwards;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.9s forwards;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      border: none;
+      cursor: none;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(255,209,0,0.25);
+    }
+    .btn-primary:hover {
+      background: #ffe033;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255,209,0,0.45);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 15px 40px;
+      border: 1px solid rgba(255,255,255,0.3);
+      cursor: none;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-scroll {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+    .hero-scroll span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, rgba(255,209,0,0.8), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+
+    /* ─── SECTION BASE ─── */
+    section { padding: 100px 48px; }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px; letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 6vw, 80px);
+      line-height: 1;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    /* ─── TICKER ─── */
+    .ticker-wrap {
+      overflow: hidden;
+      background: var(--gold);
+      padding: 14px 0;
+      position: relative;
+      z-index: 10;
+    }
+    .ticker {
+      display: flex; white-space: nowrap;
+      animation: ticker 18s linear infinite;
+    }
+    .ticker-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 4px;
+      color: var(--black);
+      margin-right: 60px;
+    }
+    .ticker-dot { color: rgba(0,0,0,0.35); margin-right: 60px; }
+
+    /* ─── ABOUT ─── */
+    #about {
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+    #about::before {
+      content: 'BOARD';
+      position: absolute;
+      right: -40px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 240px;
+      color: rgba(255,209,0,0.04);
+      pointer-events: none;
+      line-height: 1;
+    }
+    .about-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-text p {
+      font-size: 17px; line-height: 1.8;
+      color: rgba(245,245,245,0.65);
+      margin-bottom: 20px;
+    }
+    .about-text p strong { color: var(--gold); }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 32px; margin-top: 48px;
+    }
+    .stat-box {
+      padding: 28px;
+      border: 1px solid rgba(255,209,0,0.15);
+      background: rgba(255,209,0,0.03);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .stat-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--gold);
+    }
+    .stat-box:hover { border-color: rgba(255,209,0,0.4); }
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px; letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-visual video {
+      width: 100%;
+      border-radius: 2px;
+      filter: brightness(0.85) contrast(1.1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,209,0,0.1);
+    }
+    .about-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(255,209,0,0.08));
+      pointer-events: none;
+    }
+
+    /* ─── BRANDS ─── */
+    #brands {
+      background: var(--black);
+      text-align: center;
+    }
+    .brands-grid {
+      max-width: 960px; margin: 60px auto 0;
+      display: flex; flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+    .brand-card {
+      padding: 20px 36px;
+      background: var(--dark2);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.4);
+      transition: all 0.3s;
+      cursor: none;
+      backdrop-filter: blur(8px);
+    }
+    .brand-card:hover {
+      color: var(--gold);
+      border-color: rgba(255,209,0,0.35);
+      background: rgba(255,209,0,0.05);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 20px rgba(255,209,0,0.1);
+    }
+
+    /* ─── CATEGORIES ─── */
+    #categories {
+      background: var(--dark);
+      padding: 100px 48px;
+    }
+    .categories-header { max-width: 1200px; margin: 0 auto 60px; }
+    .cat-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .cat-card {
+      position: relative;
+      height: 340px;
+      overflow: hidden;
+      cursor: none;
+      background: var(--dark3);
+    }
+    .cat-card-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+      filter: brightness(0.5) saturate(0.8);
+    }
+    .cat-card:hover .cat-card-bg {
+      transform: scale(1.08);
+      filter: brightness(0.6) saturate(1.1);
+    }
+    .cat-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+    }
+    .cat-card-content {
+      position: absolute; bottom: 28px; left: 28px; right: 28px;
+    }
+    .cat-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px; letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .cat-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px; letter-spacing: 2px;
+      color: var(--white);
+      line-height: 1;
+    }
+    .cat-arrow {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 18px;
+      margin-top: 12px;
+      transform: translateX(-8px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .cat-card:hover .cat-arrow { opacity: 1; transform: translateX(0); }
+
+    /* cat backgrounds using gradients as placeholders */
+    .cat-1 .cat-card-bg { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
+    .cat-2 .cat-card-bg { background: linear-gradient(135deg, #1a0a00, #2d1b00, #4a2f00); }
+    .cat-3 .cat-card-bg { background: linear-gradient(135deg, #0a1a0a, #001a10, #003322); }
+
+    /* ─── WHY US ─── */
+    #why {
+      background: var(--black);
+      position: relative; overflow: hidden;
+    }
+    #why::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,209,0,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .why-grid {
+      max-width: 1200px; margin: 60px auto 0;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .why-card {
+      padding: 48px 32px;
+      background: var(--dark2);
+      transition: background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .why-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .why-card:hover { background: var(--dark3); }
+    .why-card:hover::before { transform: scaleX(1); }
+    .why-icon {
+      font-size: 36px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .why-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .why-desc {
+      font-size: 14px; line-height: 1.7;
+      color: rgba(245,245,245,0.45);
+    }
+
+    /* ─── CONTACT / WHATSAPP ─── */
+    #contato {
+      background: var(--dark);
+      position: relative; overflow: hidden;
+    }
+    #contato::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,209,0,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contato-grid {
+      max-width: 1200px; margin: 60px auto 0;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+    .contato-info h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .contato-info p {
+      font-size: 15px; line-height: 1.8;
+      color: rgba(245,245,245,0.55);
+      margin-bottom: 8px;
+    }
+    .contato-info p strong { color: var(--white); }
+    .contato-info a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .wa-buttons {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-top: 32px;
+    }
+    .wa-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 24px;
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.2);
+      text-decoration: none;
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px; font-weight: 600;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      cursor: none;
+      position: relative; overflow: hidden;
+    }
+    .wa-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(37,211,102,0.1);
+      transform: translateX(-100%);
+      transition: transform 0.35s;
+    }
+    .wa-btn:hover::before { transform: translateX(0); }
+    .wa-btn:hover {
+      border-color: rgba(37,211,102,0.5);
+      transform: translateX(4px);
+    }
+    .wa-icon {
+      width: 38px; height: 38px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .wa-info { flex: 1; }
+    .wa-name {
+      font-size: 16px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--white);
+    }
+    .wa-num {
+      font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 0.5px;
+    }
+    .wa-arrow { color: rgba(255,255,255,0.3); font-size: 18px; }
+    .contato-map-side h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .map-placeholder {
+      width: 100%;
+      height: 300px;
+      background: var(--dark2);
+      border: 1px solid rgba(255,209,0,0.12);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      position: relative; overflow: hidden;
+    }
+    .map-placeholder iframe {
+      width: 100%; height: 100%;
+      border: none; filter: grayscale(1) invert(1) contrast(0.9) brightness(0.8);
+    }
+    .address-box {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: rgba(255,209,0,0.04);
+      border: 1px solid rgba(255,209,0,0.15);
+      border-left: 3px solid var(--gold);
+    }
+    .address-box p {
+      font-size: 14px; line-height: 1.7;
+      color: rgba(245,245,245,0.6);
+    }
+    .address-box p strong { color: var(--white); }
+    .social-links {
+      display: flex; gap: 12px; margin-top: 24px;
+    }
+    .soc-link {
+      width: 44px; height: 44px;
+      background: var(--dark3);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      font-size: 20px;
+      transition: all 0.3s;
+      cursor: none;
+    }
+    .soc-link:hover {
+      border-color: var(--gold);
+      background: rgba(255,209,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,209,0,0.12);
+      padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-logo img { height: 42px; opacity: 0.7; }
+    .footer-copy {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+    }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ─── BLUR GLASS CARDS ─── */
+    .glass {
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── KEYFRAMES ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.2); }
+    }
+    @keyframes floatGlow {
+      0%, 100% { box-shadow: 0 0 30px rgba(255,209,0,0.15); }
+      50%       { box-shadow: 0 0 60px rgba(255,209,0,0.35); }
+    }
+
+    /* ─── HAMBURGER (mobile) ─── */
+    .ham { display: none; flex-direction: column; gap: 5px; cursor: none; }
+    .ham span { width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .ham { display: flex; }
+      section { padding: 72px 24px; }
+      .about-grid, .contato-grid { grid-template-columns: 1fr; gap: 48px; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 560px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr; }
+    }
+
+    /* ─── GOLD LINE DIVIDER ─── */
+    .divider {
+      width: 60px; height: 3px;
+      background: var(--gold);
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cursor"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">
+      <img src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWZyYTUtMS5jZG5pbnN0YWdyYW0uY29tL3YvdDUxLjgyNzg3LTE5LzYzNzcxMDUxMV8xODU2NTYxOTk5ODAzMTg3OF82NjMxMzQ3MzEyNTI5NTgwMzIzX24uanBnP2VmZz1leUoyWlc1amIyUmxYM1JoWnlJNkluQnliMlpwYkdWZmNHbGpMbVJxWVc1bmJ5NDRPREV1WXpJaWZRJl9uY19odD1zY29udGVudC1mcmE1LTEuY2RuaW5zdGFncmFtLmNvbSZfbmNfY2F0PTExMCZfbmNfb2M9UTZjWjJnRU1mYkV2c2dnYUFZb19XRWZtSGZ3dXR2VWdFeWNCSVJfUjAyY2tVQ1UtcFJEd3pQSVVKV2ZEeE5YeTg3TEJUOWI0MFVYMHVtVGNtZjY5U1F0U1dQWnUmX25jX29oYz1VOFJMUWZvWFZxWVE3a052d0hjUDZBbSZfbmNfZ2lkPTdCTVd1S1hHdlpOdTEzVW92cU12VncmZWRtPUFDV0RxYjhCQUFBQSZjY2I9Ny01Jm9oPTAwX0FmM1FoeG9WcEVvOEdjTEtCQnVyNkVMRWZNanNiMmlRQ2RFMXRTT0pJV3ItOWcmb2U9NjlFQUU2NEEmX25jX3NpZD1lZTk4NzkiLCJmaWxlbmFtZSI6IlNhdmVHcmFtLkFwcF82Mzc3MTA1MTFfMTg1NjU2MTk5OTgwMzE4NzhfNjYzMTM0NzMxMjUyOTU4MDMyM19uLmpwZyIsIm5iZiI6MTc3NjYxOTE0NywiZXhwIjoxNzc2NjIyNzQ3LCJpYXQiOjE3NzY2MTkxNDd9.s_YwOQWm4z-EcolwxpOp0z0ohprMebBD4kIKUji_60U" alt="Board Point"/>
+    </a>
+    <ul class="nav-links" id="navlinks">
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#brands">Marcas</a></li>
+      <li><a href="#categories">Categorias</a></li>
+      <li><a href="#contato">Contato</a></li>
+      <li><a href="https://www.instagram.com/board_point/" target="_blank">Instagram</a></li>
+      <li><a href="#contato" class="nav-cta">Fale Conosco</a></li>
+    </ul>
+    <div class="ham" id="ham">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <video id="hero-video" autoplay muted loop playsinline preload="auto"
+      src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LmNkbmluc3RhZ3JhbS5jb20vbzEvdi90MTYvZjIvbTgyL0FRTWRMNXIwdnhqMk5nTW5VTzhialhCUmwwYzU4c1dGVzNORjVNVDN4YXlXSmh4aW9RbnpYTW9OWlR0Q3hBUldlSU9acERGNzVpZ1EyTUpnUVhaa29oWVYwRE9MclhwZTR4MjJlckEubXA0P3N0cD1kc3QtbXA0JmVmZz1leUp4WlY5bmNtOTFjSE1pT2lKYlhDSnBaMTkzWldKZlpHVnNhWFpsY25sZmRuUnpYMjkwWmx3aVhTSXNJblpsYm1OdlpHVmZkR0ZuSWpvaWRuUnpYM1p2WkY5MWNteG5aVzR1WTJ4cGNITXVZekl1TnpJd0xtSmhjMlZzYVc1bEluMCZfbmNfY2F0PTEwMyZ2cz0xMTY4MzcyNDIwOTk3MjkzXzE1MTcxODM0MjgmX25jX3ZzPUhCa3NGUUlZVDJsblgzaHdkbDl5WldWc2MxOXdaWEp0WVc1bGJuUmZjSEp2WkM4NE1qUXdRVFV4TURJNE5USTFNREJHUmpWRk9EYzFOVEpGT1VZek1qTkNSVjkyYVdSbGIxOWtZWE5vYVc1cGRDNXRjRFFWQUFMSUFSSUFGUUlZT25CaGMzTjBhSEp2ZFdkb1gyVjJaWEp6ZEc5eVpTOUhSM2x0YldocmIyVldaa05vV1RSSFFVbGhORkZ3WWpCMFoyOU5ZbkZmUlVGQlFVWVZBZ0xJQVJJQUtBQVlBQnNBRlFBQUp2akE0TDJiNzY1QUZRSW9Ba016TEJkQVBtMlJhSEt3SVJnU1pHRnphRjlpWVhObGJHbHVaVjh4WDNZeEVRQjElMkZnZGw1cDBCQUElM0QlM0QmX25jX3JpZD1jNmYwZDg0MTg3JmNjYj05LTQmb2g9MDBfQWYySnE3MVZLWG5Ob18zWE1OYm4zQjVSSUtKeHpST0RNM2VBSlVjVWE2VG83QSZvZT02OUU2RDg5QiZfbmNfc2lkPTEwZDEzYiIsImZpbGVuYW1lIjoiU25hcFJlZWxzLk5ldF9BUU1kTDVyMHZ4ajJOZ01uVU84YmpYQlJsMGM1OHNXRlczTkY1TVQzeGF5V0poeGlvUW56WE1vTlpUdEN4QVJXZUlPWnBERjc1aWdRMk1KZ1FYWmtvaFlWMERPTHJYcGU0eDIyZXJBLm1wNCIsIm5iZiI6MTc3NjYxNzYxNSwiZXhwIjoxNzc2NjIxMjE1LCJpYXQiOjE3NzY2MTc2MTV9.Ii9OiQP34D86o2iq46TXZLhAN5UHGQkOEhIYwR4aTXU">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Campo Mourão · Paraná · Brasil</p>
+      <h1 class="hero-title">BOARD<br/><span>POINT</span></h1>
+      <p class="hero-sub">Streetwear &nbsp;·&nbsp; Tênis &nbsp;·&nbsp; Acessórios</p>
+      <div class="hero-actions">
+        <a href="#categories" class="btn-primary">Ver Categorias</a>
+        <a href="#contato" class="btn-outline">Fale Conosco</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span class="ticker-item">STREETWEAR</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">TÊNIS</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">ACESSÓRIOS</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">NIKE</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">OAKLEY</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">OUS</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">CASIO</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">CAMPO MOURÃO</span><span class="ticker-dot">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item">STREETWEAR</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">TÊNIS</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">ACESSÓRIOS</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">NIKE</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">OAKLEY</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">OUS</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">CASIO</span><span class="ticker-dot">✦</span>
+      <span class="ticker-item">CAMPO MOURÃO</span><span class="ticker-dot">✦</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p class="section-label">Quem Somos</p>
+        <h2 class="section-title">A CULTURA<br/>DO <span style="color:var(--gold)">STREET</span></h2>
+        <div class="divider"></div>
+        <p>A <strong>Board Point</strong> nasceu da paixão pela cultura streetwear e pela autenticidade das ruas. Localizada em Campo Mourão – PR, somos referência regional em moda urbana, tênis e acessórios de alto padrão.</p>
+        <p>Trabalhamos com as <strong>marcas mais respeitadas do mercado</strong> — Nike, Oakley, OUS, Casio e muito mais — para garantir que cada peça em nossa loja seja sinônimo de qualidade e estilo.</p>
+        <p>Nosso compromisso é oferecer uma experiência de compra diferenciada, com atendimento personalizado e os lançamentos mais exclusivos da temporada.</p>
+        <div class="about-stats">
+          <div class="stat-box reveal reveal-delay-1">
+            <div class="stat-number">5+</div>
+            <div class="stat-label">Anos de Mercado</div>
+          </div>
+          <div class="stat-box reveal reveal-delay-2">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Marcas Parceiras</div>
+          </div>
+          <div class="stat-box reveal reveal-delay-3">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Produtos Originais</div>
+          </div>
+          <div class="stat-box reveal reveal-delay-4">
+            <div class="stat-number">CM</div>
+            <div class="stat-label">Campo Mourão · PR</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual reveal reveal-delay-2">
+        <video autoplay muted loop playsinline
+          src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LmNkbmluc3RhZ3JhbS5jb20vbzEvdi90MTYvZjIvbTgyL0FRTWRMNXIwdnhqMk5nTW5VTzhialhCUmwwYzU4c1dGVzNORjVNVDN4YXlXSmh4aW9RbnpYTW9OWlR0Q3hBUldlSU9acERGNzVpZ1EyTUpnUVhaa29oWVYwRE9MclhwZTR4MjJlckEubXA0P3N0cD1kc3QtbXA0JmVmZz1leUp4WlY5bmNtOTFjSE1pT2lKYlhDSnBaMTkzWldKZlpHVnNhWFpsY25sZmRuUnpYMjkwWmx3aVhTSXNJblpsYm1OdlpHVmZkR0ZuSWpvaWRuUnpYM1p2WkY5MWNteG5aVzR1WTJ4cGNITXVZekl1TnpJd0xtSmhjMlZzYVc1bEluMCZfbmNfY2F0PTEwMyZ2cz0xMTY4MzcyNDIwOTk3MjkzXzE1MTcxODM0MjgmX25jX3ZzPUhCa3NGUUlZVDJsblgzaHdkbDl5WldWc2MxOXdaWEp0WVc1bGJuUmZjSEp2WkM4NE1qUXdRVFV4TURJNE5USTFNREJHUmpWRk9EYzFOVEpGT1VZek1qTkNSVjkyYVdSbGIxOWtZWE5vYVc1cGRDNXRjRFFWQUFMSUFSSUFGUUlZT25CaGMzTjBhSEp2ZFdkb1gyVjJaWEp6ZEc5eVpTOUhSM2x0YldocmIyVldaa05vV1RSSFFVbGhORkZ3WWpCMFoyOU5ZbkZmUlVGQlFVWVZBZ0xJQVJJQUtBQVlBQnNBRlFBQUp2akE0TDJiNzY1QUZRSW9Ba016TEJkQVBtMlJhSEt3SVJnU1pHRnphRjlpWVhObGJHbHVaVjh4WDNZeEVRQjElMkZnZGw1cDBCQUElM0QlM0QmX25jX3JpZD1jNmYwZDg0MTg3JmNjYj05LTQmb2g9MDBfQWYySnE3MVZLWG5Ob18zWE1OYm4zQjVSSUtKeHpST0RNM2VBSlVjVWE2VG83QSZvZT02OUU2RDg5QiZfbmNfc2lkPTEwZDEzYiIsImZpbGVuYW1lIjoiU25hcFJlZWxzLk5ldF9BUU1kTDVyMHZ4ajJOZ01uVU84YmpYQlJsMGM1OHNXRlczTkY1TVQzeGF5V0poeGlvUW56WE1vTlpUdEN4QVJXZUlPWnBERjc1aWdRMk1KZ1FYWmtvaFlWMERPTHJYcGU0eDIyZXJBLm1wNCIsIm5iZiI6MTc3NjYxNzYxNSwiZXhwIjoxNzc2NjIxMjE1LCJpYXQiOjE3NzY2MTc2MTV9.Ii9OiQP34D86o2iq46TXZLhAN5UHGQkOEhIYwR4aTXU">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section id="brands">
+    <div style="max-width:1200px;margin:0 auto;">
+      <p class="section-label reveal">Parceiros Oficiais</p>
+      <h2 class="section-title reveal">NOSSAS <span style="color:var(--gold)">MARCAS</span></h2>
+      <div class="divider reveal"></div>
+      <p style="color:rgba(245,245,245,0.5);max-width:520px;line-height:1.7;font-size:16px;" class="reveal">
+        Trabalhamos com as marcas mais icônicas do universo streetwear e sneaker culture. Somente originais, somente o melhor.
+      </p>
+      <div class="brands-grid">
+        <div class="brand-card reveal reveal-delay-1">OUS</div>
+        <div class="brand-card reveal reveal-delay-1">CASIO</div>
+        <div class="brand-card reveal reveal-delay-2">NIKE</div>
+        <div class="brand-card reveal reveal-delay-2">OAKLEY</div>
+        <div class="brand-card reveal reveal-delay-3">ADIDAS</div>
+        <div class="brand-card reveal reveal-delay-3">NEW BALANCE</div>
+        <div class="brand-card reveal reveal-delay-4">VANS</div>
+        <div class="brand-card reveal reveal-delay-4">E MUITO MAIS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section id="categories">
+    <div class="categories-header">
+      <p class="section-label reveal">O Que Você Encontra</p>
+      <h2 class="section-title reveal">NOSSAS <span style="color:var(--gold)">CATEGORIAS</span></h2>
+      <div class="divider reveal"></div>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card cat-1 reveal">
+        <div class="cat-card-bg" style="background:linear-gradient(135deg,#0a0a1a,#111130,#1a1a4a);"></div>
+        <div class="cat-card-overlay"></div>
+        <div class="cat-card-content">
+          <p class="cat-tag">Urban Culture</p>
+          <h3 class="cat-name">STREETWEAR</h3>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+      <div class="cat-card cat-2 reveal reveal-delay-2">
+        <div class="cat-card-bg" style="background:linear-gradient(135deg,#1a0a00,#2d1500,#4a2500);"></div>
+        <div class="cat-card-overlay"></div>
+        <div class="cat-card-content">
+          <p class="cat-tag">Sneaker Culture</p>
+          <h3 class="cat-name">TÊNIS</h3>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+      <div class="cat-card cat-3 reveal reveal-delay-3">
+        <div class="cat-card-bg" style="background:linear-gradient(135deg,#0f0f0f,#1a1500,#2d2500);"></div>
+        <div class="cat-card-overlay"></div>
+        <div class="cat-card-content">
+          <p class="cat-tag">Complete Your Look</p>
+          <h3 class="cat-name">ACESSÓRIOS</h3>
+          <div class="cat-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div style="max-width:1200px;margin:0 auto;">
+      <p class="section-label reveal">Por Que a Board Point</p>
+      <h2 class="section-title reveal">NOSSOS <span style="color:var(--gold)">DIFERENCIAIS</span></h2>
+      <div class="divider reveal"></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <span class="why-icon">✦</span>
+        <div class="why-title">Produtos Originais</div>
+        <p class="why-desc">100% de garantia de autenticidade em todas as peças. Direto dos melhores distribuidores do Brasil.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-1">
+        <span class="why-icon">◈</span>
+        <div class="why-title">Atendimento Exclusivo</div>
+        <p class="why-desc">Nossa equipe é apaixonada por moda urbana e está pronta para te ajudar a montar o look perfeito.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <span class="why-icon">◇</span>
+        <div class="why-title">Lançamentos em Primeira Mão</div>
+        <p class="why-desc">Fique por dentro dos drops mais aguardados. Acompanhe nosso Instagram e não perca nenhuma novidade.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-3">
+        <span class="why-icon">△</span>
+        <div class="why-title">Loja Física em CM</div>
+        <p class="why-desc">Venha nos visitar em Campo Mourão e viver a experiência Board Point de perto. Te esperamos!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div style="max-width:1200px;margin:0 auto;">
+      <p class="section-label reveal">Fale com a Gente</p>
+      <h2 class="section-title reveal">CONTATO &amp; <span style="color:var(--gold)">LOCALIZAÇÃO</span></h2>
+      <div class="divider reveal"></div>
+    </div>
+    <div class="contato-grid">
+      <div class="contato-info reveal">
+        <h3>WHATSAPP</h3>
+        <p>Mande uma mensagem para um dos nossos atendentes. Respondemos rapidinho! 🚀</p>
+        <div class="wa-buttons" id="wa-buttons">
+          <!-- JS preenche aleatório -->
+        </div>
+        <div style="margin-top:32px;">
+          <h3>REDES SOCIAIS</h3>
+          <p>Nos siga e fique por dentro de todos os drops e novidades.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/board_point/" target="_blank" class="soc-link" title="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="contato-map-side reveal reveal-delay-2">
+        <h3>LOJA FÍSICA</h3>
+        <div class="map-placeholder">
+          <iframe
+            loading="lazy"
+            allowfullscreen
+            src="https://www.google.com/maps?q=Av.+Manoel+Mendes+de+Camargo,+1352,+Campo+Mour%C3%A3o,+PR&output=embed">
+          </iframe>
+        </div>
+        <div class="address-box" style="margin-top:16px;">
+          <p>
+            <strong>Board Point – Loja Física</strong><br/>
+            Av. Manoel Mendes de Camargo, 1352<br/>
+            Campo Mourão – PR, Brasil
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="https://dl.snapcdn.app/get?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3Njb250ZW50LWZyYTUtMS5jZG5pbnN0YWdyYW0uY29tL3YvdDUxLjgyNzg3LTE5LzYzNzcxMDUxMV8xODU2NTYxOTk5ODAzMTg3OF82NjMxMzQ3MzEyNTI5NTgwMzIzX24uanBnP2VmZz1leUoyWlc1amIyUmxYM1JoWnlJNkluQnliMlpwYkdWZmNHbGpMbVJxWVc1bmJ5NDRPREV1WXpJaWZRJl9uY19odD1zY29udGVudC1mcmE1LTEuY2RuaW5zdGFncmFtLmNvbSZfbmNfY2F0PTExMCZfbmNfb2M9UTZjWjJnRU1mYkV2c2dnYUFZb19XRWZtSGZ3dXR2VWdFeWNCSVJfUjAyY2tVQ1UtcFJEd3pQSVVKV2ZEeE5YeTg3TEJUOWI0MFVYMHVtVGNtZjY5U1F0U1dQWnUmX25jX29oYz1VOFJMUWZvWFZxWVE3a052d0hjUDZBbSZfbmNfZ2lkPTdCTVd1S1hHdlpOdTEzVW92cU12VncmZWRtPUFDV0RxYjhCQUFBQSZjY2I9Ny01Jm9oPTAwX0FmM1FoeG9WcEVvOEdjTEtCQnVyNkVMRWZNanNiMmlRQ2RFMXRTT0pJV3ItOWcmb2U9NjlFQUU2NEEmX25jX3NpZD1lZTk4NzkiLCJmaWxlbmFtZSI6IlNhdmVHcmFtLkFwcF82Mzc3MTA1MTFfMTg1NjU2MTk5OTgwMzE4NzhfNjYzMTM0NzMxMjUyOTU4MDMyM19uLmpwZyIsIm5iZiI6MTc3NjYxOTE0NywiZXhwIjoxNzc2NjIyNzQ3LCJpYXQiOjE3NzY2MTkxNDd9.s_YwOQWm4z-EcolwxpOp0z0ohprMebBD4kIKUji_60U" alt="Board Point"/>
+    </div>
+    <div class="footer-copy">© 2025 Board Point · Campo Mourão · PR</div>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/board_point/" target="_blank">Instagram</a>
+      <a href="#contato">Contato</a>
+      <a href="#about">Sobre</a>
+    </div>
+  </footer>
+
+  <script>
+    // ── CUSTOM CURSOR ──
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .brand-card, .cat-card, .wa-btn, .soc-link').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // ── NAV SCROLL ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── HAMBURGER ──
+    document.getElementById('ham').addEventListener('click', () => {
+      const nl = document.getElementById('navlinks');
+      if (nl.style.display === 'flex') {
+        nl.style.display = 'none';
+      } else {
+        nl.style.display = 'flex';
+        nl.style.flexDirection = 'column';
+        nl.style.position = 'absolute';
+        nl.style.top = '70px'; nl.style.right = '24px';
+        nl.style.background = 'rgba(10,10,10,0.96)';
+        nl.style.padding = '24px';
+        nl.style.gap = '20px';
+        nl.style.border = '1px solid rgba(255,209,0,0.12)';
+        nl.style.backdropFilter = 'blur(20px)';
+      }
+    });
+
+    // ── SCROLL REVEAL ──
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => io.observe(r));
+
+    // ── WHATSAPP BUTTONS (random order) ──
+    const contacts = [
+      { name: 'Thiago', num: '+55 44 99741-2047', raw: '5544997412047' },
+      { name: 'Gabriel', num: '+55 44 99817-6666', raw: '5544998176666' },
+      { name: 'Jéssica', num: '+55 44 99858-9076', raw: '5544998589076' },
+    ];
+    // Fisher-Yates shuffle
+    for (let i = contacts.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [contacts[i], contacts[j]] = [contacts[j], contacts[i]];
+    }
+    const waContainer = document.getElementById('wa-buttons');
+    contacts.forEach(c => {
+      const a = document.createElement('a');
+      a.href = `https://wa.me/${c.raw}?text=Ol%C3%A1!%20Vi%20a%20Board%20Point%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos!`;
+      a.target = '_blank';
+      a.className = 'wa-btn';
+      a.innerHTML = `
+        <div class="wa-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.135.563 4.14 1.535 5.876L0 24l6.291-1.508A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.894 0-3.662-.519-5.17-1.42l-.37-.217-3.734.895.94-3.606-.24-.383A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        </div>
+        <div class="wa-info">
+          <div class="wa-name">${c.name}</div>
+          <div class="wa-num">${c.num}</div>
+        </div>
+        <div class="wa-arrow">→</div>`;
+      waContainer.appendChild(a);
+    });
+  </script>
+</body>
+</html>
